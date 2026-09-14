@@ -1,0 +1,15 @@
+[general]
+format=wav49|wav
+serveremail=voip-asterisk@example.invalid
+attach=yes
+skipms=3000
+maxsilence=10
+silencethreshold=128
+maxlogins=3
+
+[zonemessages]
+central=Europe/Paris|'vm-received' Q 'digits/at' IMp
+
+[default]
+1000 => CHANGE_ME,Direction,direction@example.invalid
+1001 => CHANGE_ME,Secretariat,secretariat@example.invalid

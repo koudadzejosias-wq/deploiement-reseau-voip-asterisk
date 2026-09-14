@@ -1,0 +1,41 @@
+[transport-udp]
+type=transport
+protocol=udp
+bind=0.0.0.0:5060
+
+; Configure TLS only after installing a certificate outside the repository.
+; [transport-tls]
+; type=transport
+; protocol=tls
+; bind=0.0.0.0:5061
+; cert_file=/etc/asterisk/keys/asterisk.crt
+; priv_key_file=/etc/asterisk/keys/asterisk.key
+; method=tlsv1_2
+
+[endpoint-template](!)
+type=endpoint
+context=interne
+disallow=all
+allow=g722,ulaw,alaw,opus
+direct_media=no
+auth=auth-template
+aors=aor-template
+
+[auth-template](!)
+type=auth
+auth_type=userpass
+
+[aor-template](!)
+type=aor
+max_contacts=1
+
+; Replace the example password before deployment.
+[1000](endpoint-template)
+auth=auth1000
+aors=1000
+
+[auth1000](auth-template)
+username=1000
+password=CHANGE_ME
+
+[1000](aor-template)

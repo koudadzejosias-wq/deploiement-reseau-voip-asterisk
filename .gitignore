@@ -1,0 +1,27 @@
+# VMware virtual machines and runtime files
+*.vmdk
+*.vmem
+*.vmss
+*.nvram
+*.scoreboard
+*.vmsd
+*.vmx
+*.vmxf
+*.log
+
+# Asterisk runtime data and local secrets
+*.key
+*.crt
+*.pem
+*.p12
+*.pfx
+config/local/
+asterisk/keys/
+asterisk/sounds/custom/
+asterisk/voicemail/
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

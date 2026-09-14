@@ -13,3 +13,4 @@ central=Europe/Paris|'vm-received' Q 'digits/at' IMp
 [default]
 1000 => CHANGE_ME,Direction,direction@example.invalid
 1001 => CHANGE_ME,Secretariat,secretariat@example.invalid
+2000 => CHANGE_ME,Softphone,softphone@example.invalid

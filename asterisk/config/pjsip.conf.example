@@ -39,3 +39,23 @@ username=1000
 password=CHANGE_ME
 
 [1000](aor-template)
+
+[1001](endpoint-template)
+auth=auth1001
+aors=1001
+
+[auth1001](auth-template)
+username=1001
+password=CHANGE_ME
+
+[1001](aor-template)
+
+[2000](endpoint-template)
+auth=auth2000
+aors=2000
+
+[auth2000](auth-template)
+username=2000
+password=CHANGE_ME
+
+[2000](aor-template)

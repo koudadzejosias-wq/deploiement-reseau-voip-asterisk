@@ -4,10 +4,6 @@ Projet PPE 300 : conception et déploiement d'une infrastructure réseau segment
 réunissant une téléphonie IP Asterisk, une vidéosurveillance IP et des portiers
 vidéo.
 
-<p align="center">
-  <img src="docs/images/architecture-deploiement.png" alt="Architecture de déploiement VoIP et vidéosurveillance" width="100%">
-</p>
-
 ## Objectifs
 
 - Déployer un IPBX Asterisk 18 LTS sur Ubuntu Server 22.04 LTS.
@@ -80,9 +76,13 @@ asterisk/
     pjsip.conf.example
     extensions.conf
     voicemail.conf.example
+    rtp.conf.example
 docs/
   deployment.md
   acceptance-tests.md
+  network-plan.md
+  security-and-operations.md
+  device-integration.md
 ```
 
 Les fichiers `*.example` sont des modèles. Les mots de passe, certificats TLS,
@@ -97,6 +97,13 @@ local non versionné.
 4. Copier les fichiers de configuration dans `/etc/asterisk/`, puis remplacer toutes les valeurs d'exemple.
 5. Générer ou installer les certificats TLS et configurer le pare-feu pfSense.
 6. Redémarrer Asterisk et exécuter la matrice de recette dans [docs/acceptance-tests.md](docs/acceptance-tests.md).
+
+Pour les détails d'adressage, de pare-feu, de QoS et de ports réseau, consulter
+[docs/network-plan.md](docs/network-plan.md). Les sauvegardes, journaux,
+renouvellements de certificats et contrôles récurrents sont décrits dans
+[docs/security-and-operations.md](docs/security-and-operations.md).
+L'intégration de la passerelle FXO, des portiers, des téléphones et des
+softphones est détaillée dans [docs/device-integration.md](docs/device-integration.md).
 
 ## Téléchargements officiels
 

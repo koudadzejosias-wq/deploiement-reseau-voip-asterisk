@@ -122,4 +122,5 @@ limités aux réseaux nécessaires et l'administration doit rester sur le VLAN 3
 
 ## Licence
 
-À compléter selon les règles de diffusion du projet PPE 300.
+Projet personnel. Toute réutilisation ou diffusion du contenu doit être autorisée
+par l'auteur.

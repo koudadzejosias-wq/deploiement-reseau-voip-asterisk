@@ -18,8 +18,6 @@ vidéo.
 
 ## Architecture réseau
 
-![Schéma de l'architecture réseau](docs/images/architecture-deploiement.png)
-
 ### Schéma logique des VLAN
 
 ```text

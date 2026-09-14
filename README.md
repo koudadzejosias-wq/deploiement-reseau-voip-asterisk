@@ -81,8 +81,6 @@ asterisk/
     extensions.conf
     voicemail.conf.example
 docs/
-  images/
-    architecture-deploiement.png
   deployment.md
   acceptance-tests.md
 ```

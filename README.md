@@ -1,16 +1,56 @@
 # Déploiement Réseau VoIP Asterisk avec Vidéosurveillance IP et Portier Téléphonique
 
-Projet PPE 300 : conception et déploiement d'une infrastructure réseau segmentée réunissant une téléphonie IP Asterisk, une vidéosurveillance IP et des portiers vidéo.
+Projet PPE 300 : conception et déploiement d'une infrastructure réseau segmentée
+réunissant une téléphonie IP Asterisk, une vidéosurveillance IP et des portiers
+vidéo.
+
+<p align="center">
+  <img src="docs/images/architecture-deploiement.png" alt="Architecture de déploiement VoIP et vidéosurveillance" width="100%">
+</p>
 
 ## Objectifs
 
 - Déployer un IPBX Asterisk 18 LTS sur Ubuntu Server 22.04 LTS.
-- Fournir les extensions Yealink et les softphones Zoiper.
+- Fournir des extensions Yealink et des softphones Zoiper.
 - Intégrer la passerelle FXO GXW4104 et les portiers vidéo DS-KIS602.
 - Segmenter les usages par VLAN et appliquer la QoS voix/vidéo.
 - Documenter les tests de recette et les contrôles de sécurité.
 
 ## Architecture réseau
+
+![Schéma de l'architecture réseau](docs/images/architecture-deploiement.png)
+
+### Schéma logique des VLAN
+
+```text
+                                      ┌─────────────────────────────────────┐
+                                      │          ROUTEUR / FIREWALL          │
+                                      │             Netgate 2100             │
+                                      │              (pfSense)               │
+                                      └──────────────────┬──────────────────┘
+                                                         │
+                                      Trunk 802.1Q : VLAN 10 • 20 • 30 • 40
+                                                         │
+                                      ┌──────────────────┴──────────────────┐
+                                      │             SWITCH PoE               │
+                                      │          Cisco SG250-26HP           │
+                                      │              24 ports               │
+                                        └───────────────────┬──────────────┬──────────────┬───────────────────┘
+                                                │              │              │              │
+                                  ┌──────────────────────────────┐  ┌──────────────────────────────┐  ┌──────────────────────────────┐  ┌──────────────────────────────┐
+                                  │ VLAN 10 : VOIP               │  │ VLAN 20 : VIDEO              │  │ VLAN 30 : MANAGEMENT         │  │ VLAN 40 : DATA               │
+                                  │ DSCP EF (Voice)              │  │ DSCP AF41 (Video)             │  │ Administration               │  │ Bureautique                  │
+                                  ├──────────────────────────────┤  ├──────────────────────────────┤  ├──────────────────────────────┤  ├──────────────────────────────┤
+                                  │ • Serveur Dell R250          │  │ • NVR Hikvision               │  │ • Switch / AP / NVR          │  │ • PC de bureau               │
+                                  │   (Asterisk)                 │  │ • 6× dômes 4MP                │  │ • Console Asterisk           │  │ • Accès Internet général     │
+                                  │ • 15× Yealink SIP-T33G       │  │ • 4× bullets 4MP              │  └──────────────────────────────┘  └──────────────────────────────┘
+                                  │ • 5× Yealink SIP-T54W        │  │ • 2× PTZ 4MP                  │
+                                  │ • 20× Softphones Zoiper      │  └──────────────────────────────┘
+                                  │ • 10× Casques Jabra          │
+                                  │ • 1× Passerelle GXW4104     │
+                                  │ • 2× Portiers DS-KIS602     │
+                                  └──────────────────────────────┘
+```
 
 | VLAN | Réseau | Usage | QoS |
 | --- | --- | --- | --- |
@@ -19,11 +59,12 @@ Projet PPE 300 : conception et déploiement d'une infrastructure réseau segment
 | 30 | `192.168.30.0/24` | Administration des équipements | Standard |
 | 40 | `192.168.40.0/24` | Postes utilisateurs et données | Standard |
 
-Équipements principaux : Netgate 2100 sous pfSense, switch Cisco SG250-26HP, serveur Dell PowerEdge R250 et NVR Hikvision.
+Équipements principaux : Netgate 2100 sous pfSense, switch Cisco SG250-26HP,
+serveur Dell PowerEdge R250 et NVR Hikvision.
 
 ## Plan de numérotation
 
-| Extensions | Usage |
+| Extension | Usage |
 | --- | --- |
 | `1000-1019` | Postes physiques Yealink |
 | `2000-2009` | Softphones et télétravail |
@@ -42,11 +83,15 @@ asterisk/
     extensions.conf
     voicemail.conf.example
 docs/
+  images/
+    architecture-deploiement.png
   deployment.md
   acceptance-tests.md
 ```
 
-Les fichiers `*.example` sont des modèles. Les mots de passe, certificats TLS, adresses réelles et données de messagerie doivent être fournis dans un emplacement local non versionné.
+Les fichiers `*.example` sont des modèles. Les mots de passe, certificats TLS,
+adresses réelles et données de messagerie doivent être fournis dans un emplacement
+local non versionné.
 
 ## Déploiement rapide
 
@@ -62,11 +107,15 @@ Les fichiers `*.example` sont des modèles. Les mots de passe, certificats TLS, 
 - [Ubuntu Server 22.04.5 LTS](https://releases.ubuntu.com/22.04/) : image ISO du système serveur.
 - [Asterisk 18 LTS](https://downloads.asterisk.org/pub/telephony/asterisk/) : sources officielles à compiler sur Ubuntu.
 
-Le projet ne distribue pas d'image ISO Asterisk personnalisée. Les fichiers VMware présents sur la machine de développement sont exclus de GitHub, car ils sont volumineux et peuvent contenir l'état ou des données privées de la machine virtuelle.
+Le projet ne distribue pas d'image ISO Asterisk personnalisée. Les fichiers VMware
+présents sur la machine de développement sont exclus de GitHub, car ils sont
+volumineux et peuvent contenir l'état ou des données privées de la machine virtuelle.
 
 ## Sécurité
 
-Ce dépôt ne doit contenir aucun mot de passe, certificat privé, sauvegarde de VM, capture réseau ou export de configuration pfSense. Les ports SIP/RTP doivent être limités aux réseaux nécessaires et l'administration doit rester sur le VLAN 30.
+Ce dépôt ne doit contenir aucun mot de passe, certificat privé, sauvegarde de VM,
+capture réseau ou export de configuration pfSense. Les ports SIP/RTP doivent être
+limités aux réseaux nécessaires et l'administration doit rester sur le VLAN 30.
 
 ## Licence
 

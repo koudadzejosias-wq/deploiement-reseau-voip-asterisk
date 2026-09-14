@@ -50,12 +50,19 @@ Les fichiers `*.example` sont des modèles. Les mots de passe, certificats TLS, 
 
 ## Déploiement rapide
 
-1. Installer Ubuntu Server 22.04 LTS et attribuer une adresse fixe dans le VLAN 10.
+1. Télécharger l'[ISO officielle Ubuntu Server 22.04.5 LTS](https://releases.ubuntu.com/22.04/) et l'installer sur le serveur ou dans une machine virtuelle. Attribuer ensuite une adresse fixe dans le VLAN 10.
 2. Installer les dépendances décrites dans [docs/deployment.md](docs/deployment.md).
 3. Compiler et installer Asterisk 18 LTS.
 4. Copier les fichiers de configuration dans `/etc/asterisk/`, puis remplacer toutes les valeurs d'exemple.
 5. Générer ou installer les certificats TLS et configurer le pare-feu pfSense.
 6. Redémarrer Asterisk et exécuter la matrice de recette dans [docs/acceptance-tests.md](docs/acceptance-tests.md).
+
+## Téléchargements officiels
+
+- [Ubuntu Server 22.04.5 LTS](https://releases.ubuntu.com/22.04/) : image ISO du système serveur.
+- [Asterisk 18 LTS](https://downloads.asterisk.org/pub/telephony/asterisk/) : sources officielles à compiler sur Ubuntu.
+
+Le projet ne distribue pas d'image ISO Asterisk personnalisée. Les fichiers VMware présents sur la machine de développement sont exclus de GitHub, car ils sont volumineux et peuvent contenir l'état ou des données privées de la machine virtuelle.
 
 ## Sécurité
 
